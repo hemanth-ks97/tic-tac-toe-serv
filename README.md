@@ -1,1 +1,1 @@
-#Multiplayer tic-tac-toe Server
+# Multiplayer tic-tac-toe server
