@@ -1,4 +1,4 @@
-package main
+package game_utils
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ func isValidMove(game *[3][3]Cellstate, player Cellstate, move string) bool{
     return game[move[0]-48][move[1]-48] == Blank;
 }
 
-func updateGame(game *[3][3]Cellstate, player Cellstate, move string) bool{
+func UpdateGame(game *[3][3]Cellstate, player Cellstate, move string) bool{
     if game[move[0]-48][move[1]-48] == Blank{
         game[move[0]-48][move[1]-48] = player; 
         return true;
@@ -33,7 +33,7 @@ func updateGame(game *[3][3]Cellstate, player Cellstate, move string) bool{
     return false;
 }
 
-func getWinState(player Cellstate) GameState{
+func GetWinState(player Cellstate) GameState{
     if player == X{
         return WX;
     }else{
@@ -41,7 +41,7 @@ func getWinState(player Cellstate) GameState{
     }
 }
 
-func checkGameState(game *[3][3]Cellstate, player Cellstate, move_num int) GameState{
+func CheckGameState(game *[3][3]Cellstate, player Cellstate, move_num int) GameState{
     //optimization
     if move_num < 5{
         return IP;
@@ -51,7 +51,7 @@ func checkGameState(game *[3][3]Cellstate, player Cellstate, move_num int) GameS
         return D;
     }
     //winstate
-    winstate := getWinState(player)
+    winstate := GetWinState(player)
     //check rows
     for i := 0; i < 3; i++{
         count := 0;
@@ -103,7 +103,7 @@ func checkGameState(game *[3][3]Cellstate, player Cellstate, move_num int) GameS
     return IP;
 }
 
-func switchPlayer(player *Cellstate){
+func SwitchPlayer(player *Cellstate){
     if *player == X{
         *player = O;
     }else{
@@ -115,20 +115,21 @@ func Say(s string){
     fmt.Println(s);
 }
 
-func main(){
+//CLI REPL
+func game(){
     fmt.Println("Tic-Tac-Toe");
     game := [3][3]Cellstate{{Blank,Blank,Blank},{Blank,Blank,Blank},{Blank,Blank,Blank}};
     curr_player := X;
     move_num := 0;
-    for checkGameState(&game, curr_player, move_num) == IP{
+    for CheckGameState(&game, curr_player, move_num) == IP{
         if move_num != 0{
-            switchPlayer(&curr_player);
+            SwitchPlayer(&curr_player);
         }
         var move string
         fmt.Printf("Player %s's turn\n", curr_player);
         fmt.Scan(&move);
         
-        for !updateGame(&game, curr_player, move){
+        for !UpdateGame(&game, curr_player, move){
             fmt.Println("Invalid move. Try again");
             fmt.Scan(&move);
         }
@@ -136,5 +137,5 @@ func main(){
         fmt.Println(game);
         move_num += 1;
      }
-     fmt.Println(checkGameState(&game, curr_player, move_num));
+     fmt.Println(CheckGameState(&game, curr_player, move_num));
 }
